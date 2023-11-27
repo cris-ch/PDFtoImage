@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 function FileUploadComponent() {
@@ -16,6 +16,8 @@ function FileUploadComponent() {
 
     const formData = new FormData();
     formData.append('pdf', selectedFile);
+    formData.append('originalFileName', selectedFile.name); // Append the original file name
+
 
     try {
       const response = await axios.post('http://localhost:3000/upload-pdf', formData, {

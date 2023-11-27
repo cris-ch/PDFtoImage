@@ -1,6 +1,6 @@
 from pdf2image import convert_from_path
 from PIL import Image
-import sys
+import sys, os
 
 def combine_images_to_single_image(images):
     widths, heights = zip(*(i.size for i in images))
@@ -17,9 +17,14 @@ def combine_images_to_single_image(images):
 
     return combined_image
 
-def convert_pdf_to_single_image(pdf_path, output_folder):
+def convert_pdf_to_single_image(pdf_path, output_folder, original_file_name):
     print(f"Received PDF path: {pdf_path}")
     print(f"Output folder: {output_folder}")
+    print(f"Original file name: {original_file_name}")
+
+    # Use original_file_name for output image name
+    image_name = os.path.splitext(original_file_name)[0] + ".jpg"
+    image_path = os.path.join(output_folder, image_name)
 
     try:
         print("Starting PDF to image conversion...")
@@ -28,7 +33,6 @@ def convert_pdf_to_single_image(pdf_path, output_folder):
 
         if len(images) > 0:
             combined_image = combine_images_to_single_image(images)
-            image_path = f"{output_folder}/combined_image.jpg"
             combined_image.save(image_path, 'JPEG')
             print(f"Saved combined image: {image_path}")
             return image_path
@@ -40,9 +44,9 @@ def convert_pdf_to_single_image(pdf_path, output_folder):
         sys.exit(1)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python3 convert_pdf_to_single_image.py <pdf_path> <output_folder>")
+    if len(sys.argv) != 4:
+        print("Usage: python3 convert_pdf_to_images.py <pdf_path> <output_folder> <original_file_name>")
         sys.exit(1)
 
-    _, pdf_path, output_folder = sys.argv
-    convert_pdf_to_single_image(pdf_path, output_folder)
+    _, pdf_path, output_folder, original_file_name = sys.argv
+    convert_pdf_to_single_image(pdf_path, output_folder, original_file_name)
