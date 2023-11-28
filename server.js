@@ -3,8 +3,12 @@ const multer = require('multer');
 const { exec } = require('child_process');
 const app = express();
 const cors = require('cors');
+const path = require('path');
+
 
 app.use(cors());
+app.use('/output', express.static('output'));
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -21,21 +25,17 @@ app.post('/upload-pdf', upload.single('pdf'), (req, res) => {
     const outputFolder = 'output';
     const originalFileName = req.body.originalFileName; // Get the original file name
 
-    console.log(`Calling Python script with: ${pdfPath}, Original File Name: ${originalFileName}`);
-
     exec(`python3 convert_pdf_to_images.py ${pdfPath} ${outputFolder} "${originalFileName}"`, (error, stdout, stderr) => {
         if (error) {
-            console.error(`Execution Error: ${error}`);
             return res.status(500).send(`Error converting PDF: ${stderr}`);
         }
         if (stderr) {
             console.error(`Script Error: ${stderr}`);
             return res.status(500).send(`Error in script: ${stderr}`);
         }
-        const imagePaths = stdout.split('\n').filter(path => path.trim());
-        console.log(`Received image paths: ${imagePaths}`);
-
-        res.json({ images: imagePaths });
+        const imageName = path.parse(originalFileName).name + ".jpg";
+        const imageUrl = `${req.protocol}://${req.get('host')}/output/${imageName}`;
+        res.json({ imageUrl: imageUrl });
     });
     
 });

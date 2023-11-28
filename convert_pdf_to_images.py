@@ -18,16 +18,12 @@ def combine_images_to_single_image(images):
     return combined_image
 
 def convert_pdf_to_single_image(pdf_path, output_folder, original_file_name):
-    print(f"Received PDF path: {pdf_path}")
-    print(f"Output folder: {output_folder}")
-    print(f"Original file name: {original_file_name}")
 
     # Use original_file_name for output image name
     image_name = os.path.splitext(original_file_name)[0] + ".jpg"
     image_path = os.path.join(output_folder, image_name)
 
     try:
-        print("Starting PDF to image conversion...")
         images = convert_from_path(pdf_path)
         print(f"Number of pages converted: {len(images)}")
 
