@@ -1,12 +1,13 @@
-import './App.css'
 import FileUpload from '../components/FileUpload'
 
 function App() {
 
   return (
     <>
-      <h1>Choose your File To Make Interactive</h1>
-      <FileUpload />
+      <div className="max-w-screen-xl mx-auto p-8 text-center">
+        <FileUpload />
+      </div>
+
     </>
   )
 }
