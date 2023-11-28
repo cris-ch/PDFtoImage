@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function FileUploadComponent() {
+function FileUploadComponent( {onImageUpload}) {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [imageSrc, setImageSrc] = useState('');
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -26,8 +25,7 @@ function FileUploadComponent() {
           'Content-Type': 'multipart/form-data',
         },
       });
-      setImageSrc(response.data.imageUrl); // Use the imageUrl from the response
-
+      onImageUpload(response.data.imageUrl);
 
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -49,15 +47,6 @@ function FileUploadComponent() {
         >
           Upload
         </button>
-      </div>
-      <div className="mt-5 grid grid-cols-4 h-screen">
-        <div className="col-span-3">
-          {/* Container for the image */}
-          {imageSrc && <img src={imageSrc} alt="Converted PDF" className="max-w-full h-auto" />}
-        </div>
-        <div className="col-span-1 bg-gray-100">
-          {/* Container for interactive tools */}
-        </div>
       </div>
 
     </div>
