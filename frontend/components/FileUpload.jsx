@@ -16,7 +16,7 @@ function FileUploadComponent( {onImageUpload}) {
 
     const formData = new FormData();
     formData.append('pdf', selectedFile);
-    formData.append('originalFileName', selectedFile.name); // Append the original file name
+    formData.append('originalFileName', selectedFile.name);
 
 
     try {
