@@ -1,19 +1,21 @@
 import { useState } from 'react'
 import FileUpload from '../components/FileUpload'
-import ImageDisplay from '../components/ImageDisplay';
+import Canvas from '../components/Canvas';
 import InteractiveTools from '../components/InteractiveTools';
 
 function App() {
   const [imageSrc, setImageSrc] = useState('');
+  const [selectedTool, setSelectedTool] = useState(null);
 
-
-  // Function to handle tool selection
   const handleToolSelect = (tool) => {
-    console.log("Selected tool:", tool);
-    // Add further logic for tool selection
+    setSelectedTool(tool);
   };
 
-
+  const handleCanvasClick = (e) => {
+    if (!selectedTool) return;
+    console.log(`Tool ${selectedTool} used at position:`, e.clientX, e.clientY);
+    // Future: Add logic to place the selected interactive element on the canvas
+  };
   return (
     <>
       <div className="max-w-screen-xl mx-auto p-8 text-center">
@@ -21,11 +23,11 @@ function App() {
         <div className="flex mt-5">
           <div className="flex-1">
             {/* Container for the image */}
-            <ImageDisplay imageSrc={imageSrc} />
+            <Canvas imageSrc={imageSrc} selectedTool={selectedTool} onCanvasClick={handleCanvasClick} />
           </div>
           <div className="w-1/4 bg-gray-100">
             {/* Container for interactive tools */}
-            <InteractiveTools />
+            <InteractiveTools onToolSelect={handleToolSelect} />
           </div>
         </div>
       </div>
