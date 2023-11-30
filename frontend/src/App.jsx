@@ -43,6 +43,27 @@ function App() {
     }
   };
 
+  const handleElementChange = (index, updatedElement) => {
+    console.log('Before update:', canvasElements);
+
+    const newElements = [...canvasElements];
+    newElements[index] = updatedElement;
+    setCanvasElements(newElements);
+
+    console.log('After update:', newElements);
+  };
+
+  const handleExport = () => {
+    const exportData = {
+      pdfId: 'some-pdf-id', // This should be dynamically set based on your app's context
+      elements: canvasElements
+    };
+  
+    console.log('Exporting data:', exportData);
+  
+    // TODO: Send this data to your backend server
+  };
+  
 
 
   return (
@@ -54,7 +75,8 @@ function App() {
             imageSrc={imageSrc}
             selectedTool={selectedTool}
             onCanvasClick={handleCanvasClick}
-            elements={canvasElements} // Pass the canvas elements here
+            elements={canvasElements}
+            onElementChange={handleElementChange}
           />
           <div className="w-1/4 bg-gray-100 sticky top-0">
             {/* Make sure this div has a background color if it overlaps any content */}
@@ -62,6 +84,13 @@ function App() {
           </div>
         </div>
       </div>
+      <button
+        className="my-4 p-2 bg-blue-500 text-white rounded"
+        onClick={handleExport}
+      >
+        Export Canvas
+      </button>
+
     </>
   );
 }
