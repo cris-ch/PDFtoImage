@@ -14,22 +14,36 @@ function App() {
   };
 
   const handleCanvasClick = (e) => {
-    if (!selectedTool || selectedTool !== 'textbox') return;
+    if (!selectedTool) return;
 
     const canvasRect = e.target.getBoundingClientRect();
-    const textboxHeight = 20; // Assuming a fixed height of 20px for the textbox
     const x = e.clientX - canvasRect.left;
-    const y = e.clientY - canvasRect.top - (textboxHeight / 2); // Adjust Y position
+    const y = e.clientY - canvasRect.top;
 
-    const newElement = {
-      type: selectedTool,
-      x: x,
-      y: y,
-      height: textboxHeight,
-    };
+    let newElement;
+    if (selectedTool === 'textbox') {
+      const textboxHeight = 20; // Fixed height for the textbox
+      newElement = {
+        type: 'textbox',
+        x: x,
+        y: y - (textboxHeight / 2),
+        height: textboxHeight,
+      };
+    } else if (selectedTool === 'checkbox') {
+      newElement = {
+        type: 'checkbox',
+        x: x,
+        y: y,
+        // Add other properties for checkbox if needed
+      };
+    }
 
-    setCanvasElements([...canvasElements, newElement]);
+    if (newElement) {
+      setCanvasElements([...canvasElements, newElement]);
+    }
   };
+
+
 
   return (
     <>
