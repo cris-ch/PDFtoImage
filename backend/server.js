@@ -31,6 +31,8 @@ app.post('/upload-pdf', upload.single('pdf'), (req, res) => {
     const pdfPath = req.file.path;
     const outputFolder = 'output';
     const originalFileName = req.body.originalFileName; // Get the original file name
+    const pdfId = req.body.pdfId; // Extract the PDF identifier
+
 
     exec(`python3 convert_pdf_to_images.py ${pdfPath} ${outputFolder} "${originalFileName}"`, (error, stdout, stderr) => {
         if (error) {
@@ -42,9 +44,9 @@ app.post('/upload-pdf', upload.single('pdf'), (req, res) => {
         }
         const imageName = path.parse(originalFileName).name + ".jpg";
         const imageUrl = `${req.protocol}://${req.get('host')}/output/${imageName}`;
-        res.json({ imageUrl: imageUrl });
+        res.json({ imageUrl: imageUrl, pdfId: pdfId });
     });
-
+    
 });
 
 app.post('/api/saveCanvasState', (req, res) => {

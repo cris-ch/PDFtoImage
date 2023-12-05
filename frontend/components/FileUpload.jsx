@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
-function FileUploadComponent( {onImageUpload}) {
+
+function FileUploadComponent({ onUploadComplete }) {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [pdfId, setPdfId] = useState(''); // State to hold the PDF identifier
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+    setPdfId(uuidv4()); // Generate a new UUID for each file selected
   };
 
   const handleUpload = async () => {
@@ -17,6 +21,7 @@ function FileUploadComponent( {onImageUpload}) {
     const formData = new FormData();
     formData.append('pdf', selectedFile);
     formData.append('originalFileName', selectedFile.name);
+    formData.append('pdfId', pdfId); // Append the PDF identifier
 
 
     try {
@@ -25,7 +30,7 @@ function FileUploadComponent( {onImageUpload}) {
           'Content-Type': 'multipart/form-data',
         },
       });
-      onImageUpload(response.data.imageUrl);
+      onUploadComplete(response.data.imageUrl, response.data.pdfId);
 
     } catch (error) {
       console.error('Error uploading file:', error);

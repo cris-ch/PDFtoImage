@@ -7,6 +7,8 @@ function App() {
   const [imageSrc, setImageSrc] = useState('');
   const [selectedTool, setSelectedTool] = useState(null);
   const [canvasElements, setCanvasElements] = useState([]);
+  const [pdfId, setPdfId] = useState(''); // State to hold the PDF identifier
+
 
 
   const handleToolSelect = (tool) => {
@@ -53,14 +55,19 @@ function App() {
     console.log('After update:', newElements);
   };
 
+  const handleUploadComplete = (imageUrl, pdfIdentifier) => {
+    setImageSrc(imageUrl);
+    setPdfId(pdfIdentifier); // Set the PDF identifier
+  };
+
   const handleExport = () => {
     const exportData = {
-      pdfId: 'your-pdf-id',
+      pdfId: pdfId,
       elements: canvasElements
     };
 
     console.log('Exporting:', exportData); // Working correctly
-  
+
     fetch('http://localhost:3000/api/saveCanvasState', {
       method: 'POST',
       headers: {
@@ -68,18 +75,18 @@ function App() {
       },
       body: JSON.stringify(exportData)
     })
-    .then(response => response.json())
-    .then(data => console.log('Success:', data))
-    .catch((error) => console.error('Error:', error));
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
+      .catch((error) => console.error('Error:', error));
   };
-  
-  
+
+
 
 
   return (
     <>
       <div className="max-w-screen-xl mx-auto p-8 text-center">
-        <FileUpload onImageUpload={setImageSrc} />
+        <FileUpload onUploadComplete={handleUploadComplete} /> {/* Update here */}
         <div className="flex mt-5">
           <Canvas
             imageSrc={imageSrc}
