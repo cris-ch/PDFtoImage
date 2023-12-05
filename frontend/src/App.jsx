@@ -55,14 +55,24 @@ function App() {
 
   const handleExport = () => {
     const exportData = {
-      pdfId: 'some-pdf-id', // This should be dynamically set based on your app's context
+      pdfId: 'your-pdf-id',
       elements: canvasElements
     };
+
+    console.log('Exporting:', exportData); // Working correctly
   
-    console.log('Exporting data:', exportData);
-  
-    // TODO: Send this data to your backend server
+    fetch('http://localhost:3000/api/saveCanvasState', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(exportData)
+    })
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch((error) => console.error('Error:', error));
   };
+  
   
 
 
